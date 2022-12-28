@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="imagine/Favicon.png"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="kurs2.css">
+<title>Персонажи Дисней</title>
+
+</head>
+<body>
+<input id="menu__toggle" type="checkbox" />
+        <label class="menu__btn" for="menu__toggle">
+            <span></span>
+        </label>
+<div class="header">
+            <header>
+                <div class="header_logo"><img src="image/logo.png" width="40px"></div>
+                <div>
+                    <nav><ul class="header_menu">
+                        <li class="header_menu_elem"><a href="index.html" class ="header_menu_link">Главная</a></li>
+                        <li class="header_menu_elem"><a href="#top" class ="header_menu_link">Каталог</a></li>
+                        <li class="header_menu_elem"><a href="index3.html" class ="header_menu_link">Новогодяя страница</a></li>
+                        <li class="header_menu_elem"><a href="kurs.html" class ="header_menu_link">Личный кабинет</a></li>
+                    </ul></nav>
+                </div>
+                
+                <div class="header_reg">
+                    <ul class="reg_list">
+                        <li><a href="index2.html">Вход</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                <button class="buttonz" onclick="stop()">
+                <i class="fa fa-caret-down"></i>
+                <img  src="image/notice0.png" alt="Уведомления" width="45px" id="notice">
+                </button>
+                <div class="dropdown-content">
+                    <div> Уведомления </div>
+                </div>
+                <script src="notices.js"></script>
+                </div>
+            </header>
+        </div>
+    
+        <div id="okno3">
+            <div class="content_box">
+            <div class="row">
+            
+            </div>
+
+            
+            <div class="container_text" style="text-align:center">
+              <h2 id="container_text_h"></h2>
+              <p id="container_text_p"></p>
+              </div>
+              <a href="#" class="close">&#10006</a>
+            </div>
+            
+            <div class="container">
+              <span onclick="this.parentElement.style.display='none'" class="closebtn"><p>×</p></span>
+              <img id="expandedImg">
+            </div>
+
+            <script>
+            function add_img(num){
+                document.querySelector(".row").remove();
+                var gallery_div = document.createElement("div");
+                gallery_div.className="row";
+                document.querySelector("#okno3").prepend(gallery_div);
+                if (num == 1){
+                    var nam = "imagine/news1/";
+                    document.querySelector("#container_text_h").textContent="Чип и Дейл спешат на помощь";
+                    document.querySelector("#container_text_p").textContent="Кадры из нового фильма. Премьера 2022 г.";
+                }
+                if (num == 2){
+                    var nam = "imagine/news2/";
+                    document.querySelector("#container_text_h").textContent="Аватар: путь воды";
+                    document.querySelector("#container_text_p").textContent="Кадры из нового фильма. Премьера 2022 г.";
+                }
+                if (num == 3){
+                    var nam = "imagine/news3/";
+                    document.querySelector("#container_text_h").textContent="Пиноккио";
+                    document.querySelector("#container_text_p").textContent="Кадры из нового фильма. Премьера 2022 г.";
+                }
+                for(let i = 1; i <= 10; i++){
+                    let n = nam +i+".jpg";
+                    console.log(n);
+                   
+                    gallery_div = document.createElement("div"); 
+                    gallery_div.className="column";
+                    document.querySelector(".row").append(gallery_div);
+                    var gallery = document.createElement("img");
+                    gallery.setAttribute("onclick", "myFunction(this);");
+                    gallery.src=n;
+                    gallery.style="width:100%";
+                    gallery_div.append(gallery);
+                }
+                console.log(document.querySelectorAll(".coloumn").childNodes)
+            }
+            function myFunction(imgs) {
+                console.log("1");
+                var expandImg = document.getElementById("expandedImg");
+                expandImg.src = imgs.src;
+                expandImg.parentElement.style.display = "block";
+            }
+            </script>
+        </div>
+<main>
+   <style>
+       .kart{
+           width: 250px;
+           height: 350px
+           
+       }
+       .sp{
+           display: inline-block;
+           list-style-type: none;
+       }
+       .sp p{
+           position: absolute;
+           background-color: rgba(0, 0, 0, 0.8);
+           width: 240px;
+           padding: 5px;
+       }
+       .sp li{
+           float:left;
+           margin: 20px;
+           
+       }
+       .sp li:hover{
+           opacity: 0.5;
+       }
+       
+       main{
+           margin-top: 60px;
+       }
+       @media(max-width:600px){
+           main{
+           margin-top: 0;
+       }
+       }
+    </style>
+    <h3><center>Здесь вы увидите весь доступный арсенал:</center></h3>
+                <ol class = "sp"> 
+                   <li><p>Энканто</p>
+                   <img class="kart" src="imagine/aside/encanto.jpg" alt="Энканто">
+                   </li>
+                    
+                    <li><p>Головоломка</p>
+                    <img class="kart" src="imagine/aside/inside_out.jpg" alt="Головоломка">
+                    </li>
+
+                    <li><p>Тайна Коко</p>
+                    <img class="kart" src="imagine/aside/koko.jpg" alt="Тайна Коко">
+                    </li>
+
+                    <li><p>Университет монстров</p>
+                    <img class="kart" src="imagine/aside/monsters_university.jpg" alt="Университет монстров">
+                    </li>
+
+                    <li><p>Мулан</p>
+                    <img class="kart" src="imagine/aside/mulan.jpg" alt="Мулан">
+                    </li>
+
+                    <li><p>Шанг Чи</p>
+                    <img class="kart" src="imagine/aside/shang-chi.jpg" alt="Шанг Чи">
+                    </li>
+
+                    <li><p>Вверх</p>
+                    <img class="kart" src="imagine/aside/up.jpg" alt="Вверх">
+                    </li>
+
+                    <li><p>Валли</p>
+                    <img class="kart" src="imagine/aside/wali.jpg" alt="Валли">
+                    </li>
+
+                    <li><p>Зверополис</p>
+                    <img class="kart" src="imagine/aside/zootopia.jpg" alt="Зверополис">
+                    </li>
+
+                    <li><p>Лука</p>
+                    <img class="kart" src="imagine/aside/luca.jpg" alt="Лука">
+                    </li>
+
+                    <li><p>Храбрая сердцем</p>
+                    <img class="kart" src="imagine/aside/brave.jpg" alt="Храбрая сердцем">
+                    </li>
+                </ol>
+    <article class="div2">
+        <div class="elem-kd">
+            <div class="kda">
+            <div class="inka">
+               <h3 class="kda-title">Чип и Дейл спешат на помощь</h3>
+               
+               <p class="kda-title">Дата выхода: 20 мая 2022 г.</p>
+               <a id="kda1" href="#okno3" onclick="add_img(1)">Подробнее</a>
+        </div>
+    </div>
+            <div class="kda">
+          <div class="inka">
+           <h3 class="kda-title">Аватар: путь воды</h3>
+           <p class="kda-title">Дата выхода: 16 декабря 2022 г.</p>
+           <a id="kda1" href="#okno3" onclick="add_img(2)">Подробнее</a>
+            </div>
+        </div>
+            <div class="kda">
+            <div class="inka">
+                <h3 class="kda-title">Пиноккио</h3>
+                <p class="kda-title">Дата выхода: 8 сентября 2022 г.</p>
+                <a id="kda1" href="#okno3" onclick="add_img(3)">Подробнее</a>
+            </div>
+            </div>
+        </div>
+        </article>
+</main>
+</body>
+</html>

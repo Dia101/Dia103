@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Персонажи Дисней</title>
+		<link rel="stylesheet" href="kurs2.css">
+		<link rel="stylesheet" href="style3.css">
+		<link rel="icon" type="image/png" href="imagine/Favicon.png"/>
+	</head>
+  <body>
+       <input id="menu__toggle" type="checkbox" />
+                    <label class="menu__btn" for="menu__toggle">
+                      <span></span></label>
+        <div class="header">
+            <header>
+                <div class="header_logo"><img src="image/logo.png" width="40px"></div>
+                <div>
+                    <nav><ul class="header_menu">
+                        <li class="header_menu_elem"><a href="index.html" class ="header_menu_link">Главная</a></li>
+                        <li class="header_menu_elem"><a href="index4.html" class ="header_menu_link">Каталог</a></li>
+                        <li class="header_menu_elem"><a href="index3.html" class ="header_menu_link">Новогодяя страница</a></li>
+                        <li class="header_menu_elem"><a href="#top" class ="header_menu_link">Личный кабинет</a></li>
+                        
+                    </ul></nav>
+                </div>
+                
+                <div class="header_reg">
+                    <ul class="reg_list">
+                        <li><a href="index2.html">Вход</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                <button class="buttonz" onclick="stop()">
+                <i class="fa fa-caret-down"></i>
+                <img  src="image/notice0.png" alt="Уведомления" width="45px" id="notice">
+                </button>
+                <div class="dropdown-content">
+                    <div> Уведомления </div>
+                </div>
+                <script src="notices.js"></script>
+                </div>
+            </header>
+        </div>
+        <main>
+        <div class="lk_inf">
+        
+    <div>
+       <form action="" method="get" id="form1" style="justify-content: center;">
+                    <filedset>
+                        <h2>Личный кабинет</h2>
+                        <legend>Информация о тебе:</legend>
+                    <p>
+                        <label for="name">Введите имя:</label>
+                        <input tabindex="1" class="style1" type="text" name="name" id="name" pattern="\D [^0-9]" placeholder="Иванов И.И." required>
+                    </p>
+                    <p>
+                        <label for="email">Введите email:</label>
+                        <input tabindex="2" class="style1" type="email" name="email" id="email" placeholder="ivanovii@gmail.com" required>
+                    </p>
+                    <p>
+                        <label for="tel">Введите телефон:</label>
+                        <input tabindex="3" class="style1" type="tel" name="tel" id="tel" placeholder="+7-777-777-77-77" required>
+                    </p>
+                    <p>
+                        <label for="password">Введите пароль:</label>
+                        <input tabindex="4" class="style1" type="password" name="password" id="password" minlength="6" required>
+                    </p>
+                    <p>
+                        <label for="datetime-local">Ведите дату рождения:</label>
+                        <input tabindex="5" class="style1" type="date" min="1920-01-01" max="2010-01-01" name="datetime-local" id="datetime-local" required>
+                    </p>
+                    <p>
+                        <label for="file">Скинуть файл:</label>
+                        <input tabindex="6" class="style1" type="file" name="file" id="file" >
+                    </p>
+                    <p>
+                        <label for="radio">Согласие на email рассылку: </label>
+                        <input type="radio" name="radio" id="radio" requared>
+                    </p>
+                    <p>
+                        <label for="checkbox">Согласие на обработку персональных данных</label>
+                        <input type="checkbox" name="checkbox" id="checkbox" checked>
+                    </p>
+                    <p>
+                         <label for="country">Выберите страну:</label>
+                         <select name="city" id="country">
+                             <option value="">-- Список стран --</option>
+                             <option value="rus">Россия</option>
+                             <option value="usa">США</option>
+                             <option value="uk">Великобритания</option>
+                             <option value="pl">Польша</option>
+                             <option value="fr">Франция</option>
+                             <option value="kz">Казахстан</option>
+                             <option value="vie">Вьетнам</option>
+                             <option value="kor">Южная корея</option>
+                         </select>
+                    </p>
+                    <p>
+                        <label tabindex="7"><input type="submit" name="submit" id="" required ></label>
+                        
+                    </p>
+                  </filedset>          
+                </form>
+        <h4>Предложения для развития сайта:</h4>
+        <form action="" method="get" id="textar">
+            <p>
+                <textarea  placeholder="Напишите сюда что-нибудь:" required>
+                </textarea>
+            </p>
+        </form>
+    </div>
+    </div> 
+         </main>
+    </body>
+</html>

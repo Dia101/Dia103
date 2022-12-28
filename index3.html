@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="imagine/Favicon.png"/>
+    <title>Персонажи Дисней</title>
+    <link rel="icon" type="image/png" href="imagine/Favicon.png"/>
+    <link rel="stylesheet" href="style4.css">
+
+
+</head>
+<body>
+<input id="menu__toggle" type="checkbox" />
+        <label class="menu__btn" for="menu__toggle">
+            <span></span>
+        </label>
+<div class="header">
+            <header>
+                <div class="header_logo"><img src="image/logo.png" width="40px"></div>
+                <div>
+                    <nav><ul class="header_menu">
+                        <li class="header_menu_elem"><a href="index.html" class ="header_menu_link">Главная</a></li>
+                        <li class="header_menu_elem"><a href="index4.html" class ="header_menu_link">Каталог</a></li>
+                        <li class="header_menu_elem"><a href="#top" class ="header_menu_link">Новогодяя страница</a></li>
+                         <li class="header_menu_elem"><a href="kurs.html" class ="header_menu_link">Личный кабинет</a></li>
+                    </ul></nav>
+                </div>
+                
+                <div class="header_reg">
+                    <ul class="reg_list">
+                        <li><a href="index2.html">Вход</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                <button class="buttonz" onclick="stop()">
+                <i class="fa fa-caret-down"></i>
+                <img  src="image/notice0.png" alt="Уведомления" width="45px" id="notice">
+                </button>
+                <div class="dropdown-content">
+                    <div> Уведомления </div>
+                </div>
+                <script src="notices.js"></script>
+                </div>
+            </header>
+        </div>
+        
+<main>
+<canvas id="snow-flake-app" style="position: absolute; top:0; left:0; z-index: -1; height: 100%"></canvas>
+
+<script>
+window.animation_config = {
+  generatorDelay : { min: 1, max:20 }, 
+  speed : 1,
+  x_axis_rate : 0.1,
+  weight : 0.5,
+  size : 1.5,
+  z_axis_rate : 0.05, 
+  color : {b : 255, a: 0.6}, 
+  wind : 0
+};
+    
+(function(){
+    window.animation_config = window.animation_config || {
+        generatorDelay : { min: 1, max:20 },
+        isRunning : true,
+        speed : 0.5,
+        x_axis_rate : 0.1,
+        weight : 0.5,
+        size : 1.5,
+        z_axis_rate : 0.05,
+        color : {b : 255, a: 0.5},
+        wind : 0
+    };
+    window.animation_config.isRunning = true;
+    
+    let canvas = document.getElementById('snow-flake-app');
+    let ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth * 10;
+    canvas.height = window.innerHeight * 10;
+    const generatorDelay = { min: 1, max:1 };
+    let screenBounds = { lower: 0, upper: canvas.width};
+    
+    
+    let particleArray = [];
+    
+    function randomInt(min = 0, max = 1){
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+    function randomFloat(min = 0, max = 1){
+        return (Math.random() * (max - min)) + min;
+    }
+    function randomColor(brightness, alpha){
+        return 'rgba(' + randomInt(brightness,255) + ',' + randomInt(brightness,255) + ',' + randomInt(brightness,255) + ',' + alpha + ')';
+    }
+    
+    class Particle{
+        constructor(pos, vector, z_index, size, color, weight){
+            this.pos = pos;
+            this.vector = vector;
+            this.z_index = z_index%5;
+            this.color = color;
+            this.size = size%50;
+            this.weight = weight%50;
+        }
+        
+        get displaySize(){
+            return Math.sqrt(this.z_index*this.size) * window.animation_config.size;
+        }
+        
+        draw(){
+            if(this.death || !(this.pos.x >= 0 && this.pos.x <= canvas.width )) return;
+            ctx.beginPath();
+            ctx.arc(this.pos.x, this.pos.y, this.displaySize, 0, Math.PI*2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+        
+        update(){
+            this.vector.z += randomFloat(-0.1,0.1);
+            this.z_index += this.vector.z * window.animation_config.z_axis_rate;
+            if(this.z_index <= 0) this.z_index = Math.abs(this.z_index);
+            if(this.pos.y > canvas.height - this.displaySize || !(this.pos.x >= screenBounds.lower && this.pos.x <= screenBounds.upper ) || this.displaySize <= 0){
+                this.death = true;
+                return;
+            }
+            
+            this.vector.x += (randomFloat(-0.3, 0.3) * this.z_index) * window.animation_config.x_axis_rate;
+            this.vector.y = Math.sqrt(this.weight * this.size * this.z_index) * window.animation_config.speed;
+            
+            
+            this.pos.x += this.vector.x + window.animation_config.wind;
+            this.pos.y += this.vector.y;
+        }
+    }
+    
+    function init(){
+        particleArray = [];
+        
+        function generateRandomParticle(){
+            if(window.animation_config.isRunning){
+                if(window.animation_config.wind > 0) {
+                    screenBounds.lower = (window.animation_config.wind * 200) * -1;
+                    screenBounds.upper = canvas.width;
+                }
+                else if(window.animation_config.wind < 0) {
+                    screenBounds.lower = 0;
+                    screenBounds.upper = canvas.width + (window.animation_config.wind * -200);
+                }
+                let pos = { x: randomInt(screenBounds.lower, screenBounds.upper), y: 0 };
+                let vector = { x: randomFloat(-0.3,0.3), y: randomFloat(-5,5), z: randomFloat(-0.1,0.1)};
+                let s = randomFloat(0.1,5);
+                let z = randomFloat(0.2,5);
+                let c = randomColor(window.animation_config.color.b, window.animation_config.color.a);
+                let w = window.animation_config.weight;
+                particleArray.push(new Particle(pos,vector,z,s,c,w));
+            }
+            setTimeout(generateRandomParticle, randomInt(window.animation_config.generatorDelay.min, window.animation_config.generatorDelay.max));
+        }
+        
+        
+        generateRandomParticle();
+    }
+    
+    function animate(){
+        
+        if(window.animation_config.isRunning){
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+            particleArray = particleArray.filter(particle => !particle.death);
+            for(let i = 0; i < particleArray.length; i++){
+                particleArray[i].update();
+                particleArray[i].draw();
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+    
+    init();
+    animate();
+})();
+    </script>
+
+
+
+
+<div class="name_text">
+  <h2>Микки Маус</h2>
+</div>
+
+<div class="content_box">
+<div class="row">
+  <div class="column">
+    <img src="image/1.png" alt="Дональд Дак" style="width:100%" onclick="myFunction(this);">
+  </div>
+  <div class="column">
+    <img src="image/2.png" alt="Минни Маус" style="width:100%" onclick="myFunction(this);">
+  </div>
+  <div class="column">
+    <img src="image/3.png" alt="Микки Маус" style="width:100%" onclick="myFunction(this);">
+  </div>
+  <div class="column">
+    <img src="image/4.png" alt="Гуфи" style="width:100%" onclick="myFunction(this);">
+  </div>
+</div>
+
+<div class="container">
+  <span onclick="this.parentElement.style.display='none'" class="closebtn">×</span>
+  <img id="expandedImg" style="width:100%">
+  <div id="imgtext"></div>
+</div>
+</div>
+
+<script>
+function myFunction(imgs) {
+    var expandImg = document.getElementById("expandedImg");
+    var imgText = document.getElementById("imgtext");
+    expandImg.src = imgs.src;
+    imgText.innerHTML = imgs.alt;
+    expandImg.parentElement.style.display = "block";
+}
+</script>
+<div class="name_text">
+  <h2>Принцессы Дисней</h2>
+</div>
+<br>
+<div id="shop">
+   <div id="dragObjects">
+       <img src="image/books/1.jpg" alt="Урсула">
+       <img src="image/books/2.jpg" alt="Симба">
+       <img src="image/books/3.jpg" alt="Момоа">
+       <img src="image/books/4.jpg" alt="Алладин">
+       <img src="image/books/5.jpg" alt="Тимон">
+       <img src="image/books/6.jpg" alt="Винни Пух">
+       <img src="image/books/7.jpg" alt="Черный плащ">
+       <img src="image/books/8.jpg" alt="Майк Вазовски">
+   </div>
+   <img src="image/korz.png" id="trash" style="width:200px; background-color: rgba(0, 0, 0, 0.2); border-radius: 30px; padding-left: 10px;">
+</div>
+<ul class="ul">
+    <li>Название книг:</li>
+</ul>
+
+
+<script>
+onload = function() {
+    var dragObjects = document.getElementById('dragObjects').getElementsByTagName('img')
+    for(var i=0; i<dragObjects.length; i++) {
+        new DragObject(dragObjects[i])
+    }
+    
+    new DropTarget(document.getElementById('trash'))
+    
+}
+</script>
+
+<script>function DragObject(element) {
+	element.dragObject = this
+	
+	dragMaster.makeDraggable(element)
+	
+	var rememberPosition
+	var mouseOffset
+	
+	this.onDragStart = function(offset) {
+		var s = element.style
+		rememberPosition = {top: s.top, left: s.left, position: s.position}
+		s.position = 'absolute'
+		
+		mouseOffset = offset
+	}
+		
+	this.hide = function() {
+		element.style.display = 'none' 
+	}
+	
+	this.show = function() {
+		element.style.display = '' 
+	}
+	
+	this.onDragMove = function(x, y) {
+		element.style.top =  y - mouseOffset.y +'px'
+		element.style.left = x - mouseOffset.x +'px'
+	}
+	
+	this.onDragSuccess = function(dropTarget) { }
+	
+	this.onDragFail = function() {
+		var s = element.style
+		s.top = rememberPosition.top
+		s.left = rememberPosition.left
+		s.position = rememberPosition.position
+	}
+	
+	this.toString = function() {
+		return element.alt
+	}
+}
+</script>
+
+<script>
+    function DropTarget(element) {
+	
+	element.dropTarget = this
+	
+	this.canAccept = function(dragObject) {
+		return true
+	}
+	
+	this.accept = function(dragObject) {
+		this.onLeave()
+		
+		dragObject.hide()
+		
+        let naz = document.createElement("li")
+        naz.innerHTML = dragObject
+        document.querySelector(".ul").append(naz)
+	}
+	
+	this.onLeave = function() {
+		element.className =  ''
+	}
+	
+	this.onEnter = function() {
+		element.className = 'uponMe'
+	}
+	
+	this.toString = function() {
+		return element.id
+	}
+}
+
+</script>
+<script>
+    var dragMaster = (function() {
+
+    var dragObject
+    var mouseDownAt
+
+	var currentDropTarget
+
+	
+	function mouseDown(e) {
+		e = fixEvent(e)
+		if (e.which!=1) return
+
+ 		mouseDownAt = { x: e.pageX, y: e.pageY, element: this }
+
+		addDocumentEventHandlers()
+
+		return false
+	}
+
+
+	function mouseMove(e){
+		e = fixEvent(e)
+
+		// (1)
+		if (mouseDownAt) {
+			if (Math.abs(mouseDownAt.x-e.pageX)<5 && Math.abs(mouseDownAt.y-e.pageY)<5) {
+				return false
+			}
+			// Начать перенос
+			var elem  = mouseDownAt.element
+			// текущий объект для переноса
+			dragObject = elem.dragObject
+			
+			// запомнить, с каких относительных координат начался перенос
+			var mouseOffset = getMouseOffset(elem, mouseDownAt.x, mouseDownAt.y)
+			mouseDownAt = null // запомненное значение больше не нужно, сдвиг уже вычислен
+			
+			dragObject.onDragStart(mouseOffset) // начали
+			
+		}
+
+		// (2)
+		dragObject.onDragMove(e.pageX, e.pageY)
+		
+		// (3)
+		var newTarget = getCurrentTarget(e)
+		
+		// (4)
+		if (currentDropTarget != newTarget) {
+			if (currentDropTarget) {
+				currentDropTarget.onLeave()
+			}
+			if (newTarget) {
+				newTarget.onEnter()
+			}
+			currentDropTarget = newTarget
+
+		}
+		
+		// (5)
+		return false
+    }
+	
+	
+    function mouseUp(){
+		if (!dragObject) { // (1)
+			mouseDownAt = null
+		} else {
+			// (2)
+			if (currentDropTarget) {
+				currentDropTarget.accept(dragObject)
+				dragObject.onDragSuccess(currentDropTarget)
+			} else {
+				dragObject.onDragFail()
+			}
+			dragObject = null
+            
+		}
+
+		// (3)
+		removeDocumentEventHandlers()
+    }
+
+
+	function getMouseOffset(target, x, y) {
+		var docPos	= getOffset(target)
+		return {x:x - docPos.left, y:y - docPos.top}
+	}
+
+	
+	function getCurrentTarget(e) {
+		
+		if (navigator.userAgent.match('MSIE') || navigator.userAgent.match('Gecko')) {
+			var x=e.clientX, y=e.clientY
+		} else {
+			var x=e.pageX, y=e.pageY
+		}
+		dragObject.hide()
+		var elem = document.elementFromPoint(x,y)
+		dragObject.show()
+		
+		while (elem) { 
+			if (elem.dropTarget && elem.dropTarget.canAccept(dragObject)) {
+				return elem.dropTarget
+			}
+			elem = elem.parentNode
+		}
+		return null
+	}
+
+
+	function addDocumentEventHandlers() {
+		document.onmousemove = mouseMove
+		document.onmouseup = mouseUp
+		document.ondragstart = document.body.onselectstart = function() {return false}
+	}
+	function removeDocumentEventHandlers() {
+		document.onmousemove = document.onmouseup = document.ondragstart = document.body.onselectstart = null
+	}
+
+
+    return {
+
+		makeDraggable: function(element){
+			element.onmousedown = mouseDown
+		}
+    }
+}())
+</script>
+<script>
+    function fixEvent(e) {
+	e = e || window.event
+	if ( e.pageX == null && e.clientX != null ) {
+		var html = document.documentElement
+		var body = document.body
+		e.pageX = e.clientX + (html && html.scrollLeft || body && body.scrollLeft || 0) - (html.clientLeft || 0)
+		e.pageY = e.clientY + (html && html.scrollTop || body && body.scrollTop || 0) - (html.clientTop || 0)
+	}
+	if (!e.which && e.button) {
+		e.which = e.button & 1 ? 1 : ( e.button & 2 ? 3 : ( e.button & 4 ? 2 : 0 ) )
+	}
+
+	return e
+}
+
+function getOffset(elem) {
+    if (elem.getBoundingClientRect) {
+        return getOffsetRect(elem)
+    } else {
+        return getOffsetSum(elem)
+    }
+}
+
+function getOffsetRect(elem) {
+    var box = elem.getBoundingClientRect()
+ 
+    var body = document.body
+    var docElem = document.documentElement
+ 
+    var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop
+    var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft
+    var clientTop = docElem.clientTop || body.clientTop || 0
+    var clientLeft = docElem.clientLeft || body.clientLeft || 0
+    var top  = box.top +  scrollTop - clientTop
+    var left = box.left + scrollLeft - clientLeft
+ 
+    return { top: Math.round(top), left: Math.round(left) }
+}
+
+function getOffsetSum(elem) {
+    var top=0, left=0
+    while(elem) {
+        top = top + parseInt(elem.offsetTop)
+        left = left + parseInt(elem.offsetLeft)
+        elem = elem.offsetParent        
+    }
+ 
+    return {top: top, left: left}
+}
+    </script>
+
+<canvas id="canvas" width="150px" height="150px"></canvas>
+
+<script>
+  function clock(){
+  var now = new Date();
+  var ctx = document.getElementById('canvas').getContext('2d');
+  ctx.save();
+  ctx.clearRect(0,0,150,150);
+  ctx.translate(75,75);
+  ctx.scale(0.45,0.45);
+  ctx.rotate(-Math.PI/2);
+  ctx.strokeStyle = "white";
+  ctx.lineWidth = 8;
+  ctx.lineCap = "round";
+
+  // Hour marks
+  ctx.save();
+  for (var i=0;i<12;i++){
+    ctx.beginPath();
+    ctx.rotate(Math.PI/6);
+    ctx.moveTo(100,0);
+    ctx.lineTo(120,0);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // Minute marks
+  ctx.save();
+  ctx.lineWidth = 5;
+  for (i=0;i<60;i++){
+    if (i%5!=0) {
+      ctx.beginPath();
+      ctx.moveTo(117,0);
+      ctx.lineTo(120,0);
+      ctx.stroke();
+    }
+    ctx.rotate(Math.PI/30);
+  }
+  ctx.restore();
+
+  var sec = now.getSeconds();
+  var min = now.getMinutes();
+  var hr  = now.getHours();
+  hr = hr>=12 ? hr-12 : hr;
+
+  // write Hours
+  ctx.save();
+  ctx.rotate( hr*(Math.PI/6) + (Math.PI/360)*min + (Math.PI/21600)*sec )
+  ctx.lineWidth = 14;
+  ctx.beginPath();
+  ctx.moveTo(-20,0);
+  ctx.lineTo(80,0);
+  ctx.stroke();
+  ctx.restore();
+
+  // write Minutes
+  ctx.save();
+  ctx.rotate( (Math.PI/30)*min + (Math.PI/1800)*sec )
+  ctx.lineWidth = 10;
+  ctx.beginPath();
+  ctx.moveTo(-28,0);
+  ctx.lineTo(112,0);
+  ctx.stroke();
+  ctx.restore();
+
+  // Write seconds
+  ctx.save();
+  ctx.rotate(sec * Math.PI/30);
+  ctx.strokeStyle = "#5d92db";
+  ctx.fillStyle = "#5d92db";
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.moveTo(-30,0);
+  ctx.lineTo(83,0);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(0,0,10,0,Math.PI*2,true);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(95,0,10,0,Math.PI*2,true);
+  ctx.stroke();
+  ctx.fillStyle = "#5d92db";
+  ctx.arc(0,0,3,0,Math.PI*2,true);
+  ctx.fill();
+  ctx.restore();
+
+  ctx.beginPath();
+  ctx.lineWidth = 14;
+  ctx.strokeStyle = '#5d92db';
+  ctx.arc(0,0,142,0,Math.PI*2,true);
+  ctx.stroke();
+
+  ctx.restore();
+
+  window.requestAnimationFrame(clock);
+}
+
+window.requestAnimationFrame(clock);
+
+</script>
+ 
+ 
+
+ </main>   
+</body>
+</html>
+
+
+
+  
+
+
+  
+
+ 
+
+
+

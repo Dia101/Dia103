@@ -1,0 +1,40 @@
+:root{
+    --main-bg-color: #252626;
+    --main-block-bg-color: #5d92db;
+    --main-elem-color: rgba(82, 47, 0, 0.43);
+    --main-text-color: #000000;
+    --header-bg-color: #202625; 
+    --border-color:#b9bfd1;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+
+html {
+ background-color: #212121;
+ background-attachment: fixed;
+ background-size: cover;
+ font-family: ethna;
+ color: #5d92db;
+ }
+body{
+ display: grid;
+ grid-template-columns: repeat(5, 1fr);
+ grid-column-gap: 20px;
+ grid-row-gap: 20px;
+ margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+@media (max-width: 800px) {
+    main{
+        margin-top:-30px;
+    }
+    aside{
+        margin-top: -30px;
+    }
+}
